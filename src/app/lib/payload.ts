@@ -1,4 +1,5 @@
 import type { Article, Page, SiteSetting } from './types/payload-types'
+import type { Article, Page, SiteSetting, Category } from './types/payload-types'
 
 const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || 'http://localhost:3000/api'
 
@@ -41,6 +42,19 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
 export async function getPageBySlug(slug: string): Promise<Page | null> {
   const data = await payloadFetch<PayloadListResponse<Page>>(
     `/pages?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`
+  )
+  return data.docs[0] ?? null
+}
+
+export async function getArticlesByCategory(categorySlug: string) {
+  return payloadFetch<PayloadListResponse<Article>>(
+    `/articles?where[category.slug][equals]=${encodeURIComponent(categorySlug)}&sort=-publishedDate`
+  )
+}
+
+export async function getCategoryBySlug(categorySlug: string) {
+  const data = await payloadFetch<PayloadListResponse<Category>>(
+    `/categories?where[slug][equals]=${encodeURIComponent(categorySlug)}&limit=1`
   )
   return data.docs[0] ?? null
 }
