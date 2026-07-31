@@ -1,54 +1,31 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getArticlesByCategory, getCategoryBySlug } from '../../lib/payload'
+import { getArticles } from '../lib/payload'
 
-interface PageProps {
-  params: Promise<{ slug: string }>
+export const metadata: Metadata = {
+  title: 'Latest News',
+  description: 'Catch up on everything we\'ve published — the latest articles, analysis, and coverage.',
+  openGraph: {
+    title: 'Latest News',
+    description: 'Catch up on everything we\'ve published — the latest articles, analysis, and coverage.',
+  },
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params
-  const category = await getCategoryBySlug(slug)
-
-  if (!category) {
-    return { title: 'Category Not Found' }
-  }
-
-  return {
-    title: category.name,
-    description: category.description || `Latest ${category.name} news and articles`,
-    openGraph: {
-      title: category.name,
-      description: category.description || `Latest ${category.name} news and articles`,
-    },
-  }
-}
-
-export default async function CategoryPage({ params }: PageProps) {
-  const { slug } = await params
-  const category = await getCategoryBySlug(slug)
-
-  if (!category) {
-    notFound()
-  }
-
-  const { docs: articles } = await getArticlesByCategory(slug)
+export default async function ArticlesListPage() {
+  const { docs: articles } = await getArticles()
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-2">{category.name}</h1>
-      {category.description && (
-        <p className="text-gray-500 mb-8">{category.description}</p>
-      )}
+      <h1 className="text-3xl font-bold mb-8">Latest News</h1>
 
       {articles.length === 0 ? (
-        <p className="text-gray-500">No articles in this category yet.</p>
+        <p className="text-gray-500">No articles published yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map((article) => {
             const image = typeof article.featuredImage === 'object' ? article.featuredImage : null
+            const category = typeof article.category === 'object' ? article.category : null
 
             return (
               <Link
@@ -68,7 +45,12 @@ export default async function CategoryPage({ params }: PageProps) {
                   </div>
                 )}
                 <div className="p-4">
-                  <h2 className="text-xl font-semibold mb-2">{article.title}</h2>
+                  {category && (
+                    <span className="text-xs uppercase tracking-wide text-blue-600 font-semibold">
+                      {category.name}
+                    </span>
+                  )}
+                  <h2 className="text-xl font-semibold mt-1 mb-2">{article.title}</h2>
                   <p className="text-gray-600 text-sm">{article.excerpt}</p>
                 </div>
               </Link>

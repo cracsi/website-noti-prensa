@@ -5,7 +5,10 @@ import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 
 export const metadata: Metadata = {
-  title: "The News Press",
+  title: {
+    default: "The News Press",
+    template: "%s | The News Press",
+  },
   description: "Independent, community-focused journalism.",
 };
 

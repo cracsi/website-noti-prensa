@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getArticleBySlug } from '../../lib/payload'
@@ -5,6 +6,31 @@ import { RichText } from '../../components/RichText'
 
 interface PageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const article = await getArticleBySlug(slug)
+
+  if (!article) {
+    return { title: 'Article Not Found' }
+  }
+
+  const image = typeof article.featuredImage === 'object' ? article.featuredImage : null
+
+  return {
+    title: article.title,
+    description: article.excerpt,
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      images: image?.url
+        ? [`${process.env.NEXT_PUBLIC_PAYLOAD_URL}${image.url}`]
+        : undefined,
+      type: 'article',
+      publishedTime: article.publishedDate || undefined,
+    },
+  }
 }
 
 export default async function ArticlePage({ params }: PageProps) {
