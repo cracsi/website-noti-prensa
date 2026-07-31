@@ -1,5 +1,5 @@
-import type { Article, Page, SiteSetting } from './types/payload-types'
-import type { Article, Page, SiteSetting, Category } from './types/payload-types'
+
+import type { Article, Page, SiteSetting, Category } from './payload-types'
 
 const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || 'http://localhost:3000/api'
 
