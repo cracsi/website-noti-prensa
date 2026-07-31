@@ -3,6 +3,7 @@ import "./globals.css";
 import { getSiteSettings } from "./lib/payload";
 import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
+import { draftMode } from 'next/headers'
 
 export const metadata: Metadata = {
   title: {
@@ -12,15 +13,12 @@ export const metadata: Metadata = {
   description: "Independent, community-focused journalism.",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  let siteSettings
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { isEnabled } = await draftMode()
 
+  let siteSettings
   try {
-    siteSettings = await getSiteSettings();
+    siteSettings = await getSiteSettings()
   } catch (error) {
     console.error('Failed to fetch site settings:', error)
     siteSettings = { publicationName: 'The Daily Bridge', navItems: [], footerText: '', socialLinks: [] }
@@ -29,10 +27,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Nav
-          publicationName={siteSettings.publicationName}
-          navItems={siteSettings.navItems || []}
-        />
+        {isEnabled && (
+          <div className="bg-yellow-400 text-black text-center text-sm py-2">
+            Preview Mode —{' '}
+            <a href="/api/disable-preview" className="underline font-semibold">
+              Exit Preview
+            </a>
+          </div>
+        )}
+        <Nav publicationName={siteSettings.publicationName} navItems={siteSettings.navItems || []} />
         {children}
         <Footer
           publicationName={siteSettings.publicationName}
@@ -41,5 +44,5 @@ export default async function RootLayout({
         />
       </body>
     </html>
-  );
+  )
 }

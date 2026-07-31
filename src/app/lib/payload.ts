@@ -1,5 +1,6 @@
 
 import type { Article, Page, SiteSetting, Category } from './payload-types'
+import { draftMode } from 'next/headers'
 
 const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || 'http://localhost:3000/api'
 
@@ -33,16 +34,54 @@ export async function getArticles(): Promise<PayloadListResponse<Article>> {
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-  const data = await payloadFetch<PayloadListResponse<Article>>(
-    `/articles?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`
-  )
+  const { isEnabled } = await draftMode()
+
+  const path = isEnabled
+    ? `/articles?where[slug][equals]=${encodeURIComponent(slug)}&draft=true`
+    : `/articles?where[slug][equals]=${encodeURIComponent(slug)}`
+
+  const headers: Record<string, string> = {}
+  if (isEnabled) {
+    headers['Authorization'] = `users API-Key ${process.env.PAYLOAD_API_KEY}`
+  }
+
+  const res = await fetch(`${PAYLOAD_API_URL}${path}`, {
+    headers,
+    cache: isEnabled ? 'no-store' : undefined,
+    next: isEnabled ? undefined : { revalidate: 60 },
+  })
+
+  if (!res.ok) {
+    throw new Error(`Payload API error (${res.status}) fetching article ${slug}`)
+  }
+
+  const data: PayloadListResponse<Article> = await res.json()
   return data.docs[0] ?? null
 }
 
 export async function getPageBySlug(slug: string): Promise<Page | null> {
-  const data = await payloadFetch<PayloadListResponse<Page>>(
-    `/pages?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`
-  )
+  const { isEnabled } = await draftMode()
+
+  const path = isEnabled
+    ? `/pages?where[slug][equals]=${encodeURIComponent(slug)}&draft=true`
+    : `/pages?where[slug][equals]=${encodeURIComponent(slug)}`
+
+  const headers: Record<string, string> = {}
+  if (isEnabled) {
+    headers['Authorization'] = `users API-Key ${process.env.PAYLOAD_API_KEY}`
+  }
+
+  const res = await fetch(`${PAYLOAD_API_URL}${path}`, {
+    headers,
+    cache: isEnabled ? 'no-store' : undefined,
+    next: isEnabled ? undefined : { revalidate: 60 },
+  })
+
+  if (!res.ok) {
+    throw new Error(`Payload API error (${res.status}) fetching page ${slug}`)
+  }
+
+  const data: PayloadListResponse<Page> = await res.json()
   return data.docs[0] ?? null
 }
 
@@ -58,3 +97,4 @@ export async function getCategoryBySlug(categorySlug: string) {
   )
   return data.docs[0] ?? null
 }
+
