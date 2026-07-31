@@ -9,8 +9,12 @@ const nextConfig: NextConfig = {
         port: '3000',
         pathname: '/api/media/file/**',
       },
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
-    dangerouslyAllowLocalIP: true,
+    ...(process.env.NODE_ENV === 'development' && { dangerouslyAllowLocalIP: true }),
   },
 }
 
