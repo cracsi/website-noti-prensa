@@ -35,6 +35,7 @@ export async function getArticles(): Promise<PayloadListResponse<Article>> {
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   const { isEnabled } = await draftMode()
+  console.log('DRAFT MODE ENABLED?', isEnabled)
 
   const path = isEnabled
     ? `/articles?where[slug][equals]=${encodeURIComponent(slug)}&draft=true`
@@ -45,17 +46,24 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     headers['Authorization'] = `users API-Key ${process.env.PAYLOAD_API_KEY}`
   }
 
+  console.log('FETCH PATH:', path)
+  console.log('HEADERS:', headers)
+
   const res = await fetch(`${PAYLOAD_API_URL}${path}`, {
     headers,
     cache: isEnabled ? 'no-store' : undefined,
     next: isEnabled ? undefined : { revalidate: 60 },
   })
 
+  console.log('RESPONSE STATUS:', res.status)
+
   if (!res.ok) {
     throw new Error(`Payload API error (${res.status}) fetching article ${slug}`)
   }
 
   const data: PayloadListResponse<Article> = await res.json()
+  console.log('DOCS FOUND:', data.docs.length)
+
   return data.docs[0] ?? null
 }
 
