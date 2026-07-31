@@ -71,9 +71,10 @@ export default async function ArticlePage({ params }: PageProps) {
       {image?.url && (
         <div className="relative w-full h-96 mb-8">
           <Image
-  src={`http://localhost:3000${image.url}`}
+  src={`${process.env.NEXT_PUBLIC_PAYLOAD_URL}${image.url}`}
   alt={image.alt || article.title}
   fill
+  sizes="(max-width: 768px) 100vw, 768px"
   className="object-cover rounded"
 />
         </div>
