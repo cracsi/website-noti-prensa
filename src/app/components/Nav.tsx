@@ -12,18 +12,21 @@ interface NavProps {
 
 export function Nav({ publicationName, navItems }: NavProps) {
   return (
-    <header className="border-b bg-white sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold tracking-tight">
+    <header className="bg-[#1c1f26] sticky top-0 z-50 shadow-sm">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
+        <Link
+          href="/"
+          className="text-2xl font-serif font-bold tracking-tight text-[#f5f2eb] hover:text-white transition-colors"
+        >
           {publicationName}
         </Link>
 
-        <nav className="hidden md:flex gap-6">
+        <nav className="hidden md:flex gap-8">
           {navItems?.map((item, i) => (
             <Link
               key={i}
               href={item.url}
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-sm font-medium text-[#c9c4b8] hover:text-white transition-colors uppercase tracking-wide"
             >
               {item.label}
             </Link>

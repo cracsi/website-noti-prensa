@@ -12,8 +12,8 @@ export function HeroBlock({ heading, subheading, image }: HeroBlockProps) {
   return (
     <section
       className={`relative w-full h-[560px] flex items-end mb-16 overflow-hidden ${
-        img?.url ? '' : 'bg-gradient-to-br from-gray-900 to-gray-700'
-      }`}
+  img?.url ? '' : 'bg-[#1c1f26]'
+}`}
     >
       {img?.url && (
         <>
@@ -30,14 +30,14 @@ export function HeroBlock({ heading, subheading, image }: HeroBlockProps) {
       )}
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12 pb-16 text-white">
-        <span className="inline-block text-xs uppercase tracking-widest font-semibold text-blue-400 mb-3">
-          Featured
-        </span>
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4 max-w-3xl">
+        <span className="inline-block text-xs uppercase tracking-widest font-semibold text-[#e0725f] mb-3">
+  Featured
+</span>
+        <h1 className="font-serif text-4xl md:text-6xl font-bold leading-tight mb-4 max-w-3xl">
           {heading}
         </h1>
         {subheading && (
-          <p className="text-lg md:text-xl text-gray-200 max-w-2xl">{subheading}</p>
+          <p className="text-lg md:text-xl text-gray-200 max-w-2xl leading-relaxed">{subheading}</p>
         )}
       </div>
     </section>

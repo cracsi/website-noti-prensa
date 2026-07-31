@@ -1,8 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&display=swap');
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #394e69;
+  --foreground: #302e2e;
+  --header-bg: #1c1f26;
+  --header-text: #f5f2eb;
+  --accent: #a3231f;
+  --accent-hover: #7f1b18;
+  --border-subtle: #dde2e8;
 }
 
 @theme inline {
@@ -14,7 +21,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #9898b6;
     --foreground: #ededed;
   }
 }
@@ -24,3 +31,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+
+.font-serif {
+  font-family: 'Merriweather', Georgia, serif;
+}
+
+
+
+

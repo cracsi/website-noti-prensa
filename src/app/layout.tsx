@@ -26,23 +26,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en">
-      <body>
-        {isEnabled && (
-          <div className="bg-yellow-400 text-black text-center text-sm py-2">
-            Preview Mode —{' '}
-            <a href="/api/disable-preview" className="underline font-semibold">
-              Exit Preview
-            </a>
-          </div>
-        )}
-        <Nav publicationName={siteSettings.publicationName} navItems={siteSettings.navItems || []} />
-        {children}
-        <Footer
-          publicationName={siteSettings.publicationName}
-          footerText={siteSettings.footerText}
-          socialLinks={siteSettings.socialLinks || []}
-        />
-      </body>
+      <body className="min-h-screen flex flex-col">
+  {isEnabled && (
+    <div className="bg-yellow-400 text-black text-center text-sm py-2">
+      Preview Mode —{' '}
+      <a href="/api/disable-preview" className="underline font-semibold">
+        Exit Preview
+      </a>
+    </div>
+  )}
+  <Nav publicationName={siteSettings.publicationName} navItems={siteSettings.navItems || []} />
+  <div className="flex-1">
+    {children}
+  </div>
+  <Footer
+    publicationName={siteSettings.publicationName}
+    footerText={siteSettings.footerText}
+    socialLinks={siteSettings.socialLinks || []}
+  />
+</body>
     </html>
   )
 }

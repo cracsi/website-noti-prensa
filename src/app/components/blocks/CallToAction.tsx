@@ -8,14 +8,14 @@ interface CTAProps {
 
 export function CallToActionBlock({ text, buttonLabel, buttonUrl }: CTAProps) {
   return (
-    <section className="bg-blue-600 text-white rounded-lg max-w-4xl mx-auto px-8 py-10 mb-12 text-center">
-      <p className="text-lg mb-4">{text}</p>
-      <Link
-        href={buttonUrl}
-        className="inline-block bg-white text-blue-600 font-semibold px-6 py-2 rounded hover:bg-gray-100"
-      >
-        {buttonLabel}
-      </Link>
-    </section>
+    <section className="bg-[#1c1f26] text-[#f5f2eb] rounded-xl max-w-4xl mx-auto px-8 py-12 mb-16 text-center">
+  <p className="text-xl font-serif mb-6 max-w-xl mx-auto leading-relaxed">{text}</p>
+  <Link
+    href={buttonUrl}
+    className="inline-block bg-[#a3231f] text-white font-semibold px-8 py-3 rounded-md hover:bg-[#7f1b18] transition-colors"
+  >
+    {buttonLabel}
+  </Link>
+</section>
   )
 }

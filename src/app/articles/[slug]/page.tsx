@@ -46,41 +46,48 @@ export default async function ArticlePage({ params }: PageProps) {
   const image = typeof article.featuredImage === 'object' ? article.featuredImage : null
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-8">
+    <main className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
       {category && (
-        <span className="text-sm uppercase tracking-wide text-blue-600 font-semibold">
-          {category.name}
-        </span>
+        <span className="text-xs uppercase tracking-widest text-[#a3231f] font-semibold">
+  {category.name}
+</span>
       )}
 
-      <h1 className="text-4xl font-bold mt-2 mb-4">{article.title}</h1>
+      <h1 className="font-serif text-3xl md:text-4xl font-bold mt-3 mb-4 leading-tight text-gray-900">
+        {article.title}
+      </h1>
 
-      <div className="text-gray-500 text-sm mb-6">
+      <div className="flex items-center gap-3 text-gray-500 text-sm mb-8 pb-8 border-b border-gray-100">
         {author && <span>By {author.email}</span>}
         {article.publishedDate && (
-          <span className="ml-2">
-            {new Date(article.publishedDate).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </span>
+          <>
+            <span>·</span>
+            <span>
+              {new Date(article.publishedDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </span>
+          </>
         )}
       </div>
 
       {image?.url && (
-        <div className="relative w-full h-96 mb-8">
+        <div className="relative w-full h-96 mb-10 rounded-lg overflow-hidden">
           <Image
-  src={`${process.env.NEXT_PUBLIC_PAYLOAD_URL}${image.url}`}
-  alt={image.alt || article.title}
-  fill
-  sizes="(max-width: 768px) 100vw, 768px"
-  className="object-cover rounded"
-/>
+            src={`${process.env.NEXT_PUBLIC_PAYLOAD_URL}${image.url}`}
+            alt={image.alt || article.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover"
+          />
         </div>
       )}
 
-      <RichText content={article.content} />
+      <div className="prose prose-lg prose-gray max-w-none">
+        <RichText content={article.content} />
+      </div>
     </main>
   )
 }
